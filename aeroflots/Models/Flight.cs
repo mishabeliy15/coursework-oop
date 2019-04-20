@@ -11,6 +11,7 @@ namespace aeroflots.Models
         public int Id { get; set; }
         [Required]
         public FlightSchedule Schedule { get; set; }
+        [Required]
         public DateTime Date { get; set; }
         public int FreeSeats { get; set; }
     }
