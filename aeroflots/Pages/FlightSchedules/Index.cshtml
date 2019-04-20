@@ -1,0 +1,84 @@
+﻿@page
+@model aeroflots.Pages.FlightSchedules.IndexModel
+
+@{
+    ViewData["Title"] = "Flight Schedules";
+}
+
+<h1>Flight Schedules</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Departure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].DepartureTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Arrival)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].ArrivalTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Seats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Available)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightSchedule[0].Cost)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.FlightSchedule) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Days)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartureTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Arrival)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArrivalTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Available)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
