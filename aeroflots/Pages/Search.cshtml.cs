@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using aeroflots.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace aeroflots.Pages
             (string a, string b) = (from.ToLower(), to.ToLower());
             Day day = ConvertToFlag((int)date.DayOfWeek);
             List<FlightSchedule> FlightSchedule = (await _context.FlightSchedules.ToListAsync()).
-                Where(x =>x.Available && x.Days.HasFlag(day) && x.Departure.ToLower() == a && x.Arrival.ToLower() == b).ToList();
+                Where(x => x.Available && x.Days.HasFlag(day) && x.Departure.ToLower() == a && x.Arrival.ToLower() == b).ToList();
             List<Flight> flights = (await _context.Flights.ToListAsync()).
                 Where(x => x.Date.Equals(date.Date) && FlightSchedule.Any(t => t.Id == x.Schedule.Id)).ToList();
             List<Flight> mustadd = new List<Flight>();
@@ -49,7 +50,7 @@ namespace aeroflots.Pages
         }
         public static string FirstCapitalLetter(string s)
           => (s[0] - 32).ToString() + s.Substring(1);
-        public Day ConvertToFlag(int day)
+        public static Day ConvertToFlag(int day)
             => (Day)(day > 0 ? Math.Pow(2, --day) : 64);
     }
 }
