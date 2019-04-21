@@ -1,0 +1,83 @@
+﻿@page
+@model aeroflots.Pages.SearchModel
+
+@{
+    ViewData["Title"] = "Search";
+    string date = ((DateTime)ViewData["Date"]).Date.ToLongDateString();
+}
+
+<h1>@ViewData["From"] - @ViewData["To"] on @date</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Days)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Departure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.DepartureTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Arrival)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.ArrivalTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Seats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].FreeSeats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Available)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flight[0].Schedule.Cost)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Flight)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Days)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Departure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.DepartureTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Arrival)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.ArrivalTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Seats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FreeSeats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Available)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Schedule.Cost)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

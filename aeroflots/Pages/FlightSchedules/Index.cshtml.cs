@@ -22,8 +22,6 @@ namespace aeroflots.Pages.FlightSchedules
         public IList<FlightSchedule> FlightSchedule { get;set; }
 
         public async Task OnGetAsync()
-        {
-            FlightSchedule = await _context.FlightSchedules.ToListAsync();
-        }
+            => FlightSchedule = await _context.FlightSchedules.ToListAsync();
     }
 }
