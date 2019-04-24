@@ -49,7 +49,7 @@ namespace aeroflots.Pages
             return Page();
         }
         public static string FirstCapitalLetter(string s)
-          => (s[0] - 32).ToString() + s.Substring(1);
+          => ((char)(s[0] - 32)).ToString() + s.Substring(1);
         public static Day ConvertToFlag(int day)
             => (Day)(day > 0 ? Math.Pow(2, --day) : 64);
     }
