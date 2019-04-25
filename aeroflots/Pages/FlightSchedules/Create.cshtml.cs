@@ -7,15 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using aeroflots.Data;
 using aeroflots.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aeroflots.Pages.FlightSchedules
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly aeroflots.Data.ApplicationDbContext _context;
 
-        public CreateModel(aeroflots.Data.ApplicationDbContext context) =>
-            _context = context;
+        public CreateModel(aeroflots.Data.ApplicationDbContext context)
+            => _context = context;
 
         public IActionResult OnGet() => Page();        
 

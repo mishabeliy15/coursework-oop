@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using aeroflots.Data;
 using aeroflots.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aeroflots.Pages.FlightSchedules
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly aeroflots.Data.ApplicationDbContext _context;
@@ -48,19 +50,15 @@ namespace aeroflots.Pages.FlightSchedules
             catch (DbUpdateConcurrencyException)
             {
                 if (!FlightScheduleExists(FlightSchedule.Id))
-                {
                     return NotFound();
-                }
                 else
-                {
                     throw;
-                }
             }
 
             return RedirectToPage("./Index");
         }
 
         private bool FlightScheduleExists(int id)
-        => _context.FlightSchedules.Any(e => e.Id == id);
+            => _context.FlightSchedules.Any(e => e.Id == id);
     }
 }

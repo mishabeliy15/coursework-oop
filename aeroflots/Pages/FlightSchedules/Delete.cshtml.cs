@@ -7,15 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using aeroflots.Data;
 using aeroflots.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aeroflots.Pages.FlightSchedules
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
         private readonly aeroflots.Data.ApplicationDbContext _context;
 
         public DeleteModel(aeroflots.Data.ApplicationDbContext context)
-        => _context = context;
+            => _context = context;
 
         [BindProperty]
         public FlightSchedule FlightSchedule { get; set; }

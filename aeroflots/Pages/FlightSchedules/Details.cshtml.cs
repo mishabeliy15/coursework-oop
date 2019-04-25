@@ -15,25 +15,20 @@ namespace aeroflots.Pages.FlightSchedules
         private readonly aeroflots.Data.ApplicationDbContext _context;
 
         public DetailsModel(aeroflots.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         public FlightSchedule FlightSchedule { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             FlightSchedule = await _context.FlightSchedules.FirstOrDefaultAsync(m => m.Id == id);
 
             if (FlightSchedule == null)
-            {
                 return NotFound();
-            }
+
             return Page();
         }
     }
