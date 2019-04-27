@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres
+  aeroflots:
+    image: ${DOCKER_REGISTRY-}aeroflots
+    build:
+      context: .
+      dockerfile: aeroflots/Dockerfile
+    depends_on:
+      - db
