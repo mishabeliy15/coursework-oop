@@ -19,6 +19,6 @@ namespace aeroflots.Models
         public List<Flight> Path { get; set; }
         public bool Purchased { get; set; }
         [Display(Name = "Cost")]
-        public int GetCost() => Path.Sum(x => x.Schedule.Cost);
+        public int GetCost() => Seats * Path.Sum(x => x.Schedule.Cost);
     }
 }
