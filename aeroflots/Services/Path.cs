@@ -27,40 +27,45 @@ namespace aeroflots.Services
             FlightPlans = await _db.FlightSchedules.ToListAsync();
             Flights = await _db.Flights.ToListAsync();
         }
-        public async Task SearchDirectFlights()
+        public async Task<List<Ticket>> SearchDirectTickets()
         {
-            await GetDataFromBD();
             (string a, string b) = (From.ToLower(), To.ToLower());
-            FlightPlans = FlightPlans.Where(x =>
+            List<FlightSchedule> flp = FlightPlans.Where(x =>
                 x.Available &&
                 x.Days.HasFlag(DayFlag) &&
                 x.Departure.ToLower() == a &&
                 x.Arrival.ToLower() == b).ToList();
-            Flights = Flights.Where(x =>
+            List<Flight> fl = Flights.Where(x =>
                 x.Date.Equals(Date.Date) &&
-                FlightPlans.Any(t => t.Id == x.Schedule.Id)).ToList();
+                flp.Any(t => t.Id == x.Schedule.Id)).ToList();
             List<Flight> mustadd = new List<Flight>();
-            foreach (var i in FlightPlans)
-                if (!Flights.Any(t => t.Schedule.Id == i.Id))
+            foreach (var i in flp)
+                if (!fl.Any(t => t.Schedule.Id == i.Id))
                 {
-                    Flight temp = new Flight();
-                    temp.Date = Date;
-                    temp.Schedule = i;
-                    temp.FreeSeats = i.Seats;
+                    Flight temp = new Flight() {
+                        Date = Date,
+                        Schedule = i,
+                        FreeSeats = i.Seats
+                    };
                     mustadd.Add(temp);
                 }
             if (mustadd.Count > 0)
             {
                 _db.Flights.AddRange(mustadd);
                 await _db.SaveChangesAsync();
-                Flights.AddRange(mustadd);
+                fl.AddRange(mustadd);
             }
-            Flights = Flights.Where(x => x.FreeSeats > 0).ToList();
+            return fl.Where(_ => _.FreeSeats > 0).Select(x => new Ticket()
+            {
+                Date = x.Date,
+                Path = new List<Flight>() { x }
+            }).ToList<Ticket>();
         }
-        //Must be Implemented
-        public List<Ticket> SearchDirectTickets()
+        
+        public List<Ticket> SearchTickets()
         {
             List<Ticket> tickets = new List<Ticket>();
+
             return tickets;
         }
     }

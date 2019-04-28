@@ -12,6 +12,7 @@ namespace aeroflots.Data
     {
         public DbSet<FlightSchedule> FlightSchedules { get; set; }
         public DbSet<Flight> Flights { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

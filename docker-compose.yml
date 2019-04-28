@@ -1,8 +1,6 @@
 version: '3.4'
 
 services:
-  db:
-    image: postgres
   aeroflots:
     image: ${DOCKER_REGISTRY-}aeroflots
     build:
@@ -10,3 +8,5 @@ services:
       dockerfile: aeroflots/Dockerfile
     depends_on:
       - db
+  db:
+    image: postgres

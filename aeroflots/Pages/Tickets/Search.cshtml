@@ -1,0 +1,84 @@
+﻿@page
+@model aeroflots.Pages.Tickets.SearchModel
+
+@{
+    ViewData["Title"] = "Search";
+    @using aeroflots.Models;
+}
+@functions {
+    public string GetFlight(Flight fl)
+    {
+        return $"<td>{fl.Schedule.Arrival}</td>" +
+        $"<td>{fl.Schedule.Departure}</td>" +
+        $"<td>{fl.Schedule.DepartureTime}</td>" +
+        $"<td>{fl.Schedule.DepartureTime}</td>" +
+        $"<td>{fl.Schedule.Class}</td>" +
+        $"<td>{fl.FreeSeats}</td>" +
+        $"<td>{fl.Schedule.Cost}</td>";
+    }
+}
+
+<h1>@Model.Ticket[0].Path[0].Schedule.Departure - @Model.Ticket[0].Path.Last().Schedule.Arrival</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Ticket[0].Date)
+            </th>
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Ticket[0].Path[0].Schedule.DepartureTime)
+            </th>
+            <th rowspan="2">
+                @Html.DisplayNameFor(model => model.Ticket[0].Path.Last().Schedule.ArrivalTime)
+            </th>
+            <th rowspan="2">
+                Cost
+            </th>
+            <th rowspan="2"></th>
+            <th colspan="7">
+                Path
+            </th>
+        </tr>
+        <tr>
+            <th>Arr</th>
+            <th>Dep</th>
+            <th>DepTime</th>
+            <th>ArrTime</th>
+            <th>Class</th>
+            <th>Seats</th>
+            <th>Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @foreach (var item in Model.Ticket)
+        {
+        <tr>
+            <td rowspan="@item.Path.Count">
+                @item.Date.ToShortDateString()
+            </td>
+            <td rowspan="@item.Path.Count">
+                @item.Path[0].Schedule.DepartureTime.ToString()
+            </td>
+            <td rowspan="@item.Path.Count">
+                @item.Path.Last().Schedule.ArrivalTime.ToString()
+            </td>
+            <td rowspan="@item.Path.Count">
+                @item.GetCost()
+            </td>
+            <td rowspan="@item.Path.Count">
+                Buy
+            </td>
+            @Html.Raw(GetFlight(item.Path[0]))
+        </tr>
+            @for (int i = 1; i < item.Path.Count; i++)
+            {
+                <tr>
+                    @Html.Raw(GetFlight(item.Path[i]))
+                </tr>
+            }
+        }
+    </tbody>
+</table>
