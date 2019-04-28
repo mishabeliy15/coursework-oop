@@ -20,13 +20,18 @@ namespace aeroflots.Pages.Tickets
             _context = context;
         }
 
-        public IList<Ticket> Ticket { get;set; }
+        [BindProperty]
+        public List<Ticket> Ticket { get;set; }
 
         public async Task OnGetAsync(string from, string to, DateTime date)
         {
             Path t = new Path(_context, from, to, date);
             await t.GetDataFromBD();
             Ticket = await t.SearchDirectTickets();
+            _context.Tickets.AddRange(Ticket);
+            await _context.SaveChangesAsync();
+            ViewData["Date"] = date.ToLongDateString();
+            if (Ticket.Count == 0) ViewData["FromTo"] = $"{from} - {to}";
         }
     }
 }

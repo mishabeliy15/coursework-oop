@@ -58,8 +58,9 @@ namespace aeroflots.Services
             return fl.Where(_ => _.FreeSeats > 0).Select(x => new Ticket()
             {
                 Date = x.Date,
-                Path = new List<Flight>() { x }
-            }).ToList<Ticket>();
+                Purchased = false,
+                Path = new List<Flight>(){ x }
+            }).ToList();
         }
         
         public List<Ticket> SearchTickets()

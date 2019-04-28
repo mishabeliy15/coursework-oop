@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ namespace aeroflots.Models
         public DateTime Date { get; set; }
         public int Seats { get; set; }
         public List<Flight> Path { get; set; }
+        public bool Purchased { get; set; }
         [Display(Name = "Cost")]
         public int GetCost() => Path.Sum(x => x.Schedule.Cost);
     }
