@@ -70,7 +70,7 @@ namespace aeroflots.Pages.Tickets
                     throw;
             }
 
-            return RedirectToPage("../Index");
+            return RedirectToPage("./MyTickets");
         }
 
         private bool TicketExists(int id) =>
