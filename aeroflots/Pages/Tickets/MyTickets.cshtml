@@ -44,7 +44,6 @@
             <th rowspan="2">
                 Cost
             </th>
-            <th rowspan="2"></th>
             <th colspan="7">
                 Path
             </th>
@@ -85,9 +84,6 @@
             </td>
             <td rowspan="@item.Path.Count">
                 @item.GetCost()$
-            </td>
-            <td>
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
             @Html.Raw(GetFlight(item.Path[0]))
         </tr>

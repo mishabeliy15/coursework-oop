@@ -17,8 +17,7 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="date">Date:</label>
-            <input class="form-control" required type="date" name="date" />
-        </div>
+            <input value="@DateTime.Now.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd")" class="form-control" required type="date" name="date" />        </div>
         <div class="form-group">
             <input type="submit" value="Search" class="btn btn-primary" />
         </div>

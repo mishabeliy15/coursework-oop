@@ -27,7 +27,6 @@ namespace aeroflots.Pages.Tickets
         public async Task OnGetAsync()
         {
             string userid = _userManager.GetUserId(User);
-            //await _context.FlightSchedules.ToListAsync();
             Ticket = (await _context.Tickets.Include(t => t.Path).
                     ThenInclude(t => t.Schedule).
                 ToListAsync()).Where(x =>x.Purchased && x.OwnerId == userid).ToList();
