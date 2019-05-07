@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using aeroflots.Data;
 using aeroflots.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aeroflots.Pages.Tickets
 {
+    [Authorize]
     public class MyTicketsModel : PageModel
     {
         private readonly aeroflots.Data.ApplicationDbContext _context;

@@ -27,7 +27,7 @@ namespace aeroflots.Pages.Tickets
         {
             Path t = new Path(_context, from, to, date);
             await t.GetDataFromBD();
-            Ticket = await t.SearchDirectTickets();
+            Ticket = await t.SearchTickets();
             _context.Tickets.AddRange(Ticket);
             await _context.SaveChangesAsync();
             ViewData["Date"] = date.ToLongDateString();

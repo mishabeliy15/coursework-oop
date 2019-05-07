@@ -46,13 +46,80 @@ namespace aeroflots.Services
         public async Task<List<Ticket>> SearchTransitiveTickets()
         {
             List<Ticket> tickets = new List<Ticket>();
-            DateTime d = Date;
-            List<List<Flight>> fl = new List<List<Flight>>();
-            bool from_exit = false, to_exit = false;
+            DateTime date = Date;
+            List<Flight> fl = new List<Flight>();
             for(int i = 0;i < 2; i++)
             {
-                fl.Add(await GetRaiceOnDay(d));
-                d = d.AddDays(1);
+                fl.AddRange(await GetRaiceOnDay(date));
+                date = date.AddDays(1);
+            }
+            var cities = fl.GroupBy(g => g.Schedule.Departure).
+                Select(x => new
+                {
+                    Departure = x.Key,
+                    Counts = x.Count(),
+                    Edges = x.Select(p => p).ToList()
+                }).ToList();
+            (string a, string b) = (From.ToLower(), To.ToLower());
+            int s = cities.FindIndex(x => x.Departure.ToLower() == a);
+            int dest = cities.FindIndex(x => x.Departure.ToLower() == b);
+            if (s != -1)
+            {
+                int n = cities.Count;
+                long[] d = new long[n];
+                FlInd[] p = new FlInd[n];
+                Array.Fill(d, long.MaxValue);
+                Array.Fill(p, new FlInd());
+                d[s] = 0;
+                bool[] u = new bool[n];
+                Array.Fill(u, false);
+                FlInd t_last = new FlInd();
+                for(int i = 0;i < n && t_last.Idx == -1; i++)
+                {
+                    int v = -1;
+                    for (int j = 0; j < n; ++j)
+                        if (!u[j] && (v == -1 || d[j] < d[v]))
+                            v = j;
+                    if (d[v] == long.MaxValue)
+                        break;
+                    u[v] = true;
+                    for (int j = 0; j < cities[v].Counts; ++j)
+                    {
+                        int to = cities.FindIndex(temp => temp.Departure == cities[v].Edges[j].Schedule.Arrival);
+                        long deptime = cities[v].Edges[j].Date.ToFileTimeUtc() + (long)cities[v].Edges[j].Schedule.DepartureTime.TotalMilliseconds * 6,
+                            arrtime = cities[v].Edges[j].Date.ToFileTimeUtc() + (long)cities[v].Edges[j].Schedule.ArrivalTime.TotalMilliseconds * 6;
+                        if (arrtime < deptime) arrtime += 864000000000; // 1 day in UTC
+                        if (to == -1)
+                            if (cities[v].Edges[j].Schedule.Arrival.ToLower() == b &&
+                                arrtime > d[v])
+                            {
+                                t_last = new FlInd(cities[v].Edges[j], v);
+                                break;
+                            }
+                        else
+                            continue;
+                        if (d[v] < deptime && arrtime < d[to])
+                        {
+                            d[to] = arrtime;
+                            p[to] = new FlInd(cities[v].Edges[j], v);
+                        }
+                    }
+                }
+                Ticket t = new Ticket();
+                t.Path = new List<Flight>();
+                if (dest == -1)
+                    if (t_last.Idx != -1)
+                    {
+                        dest = t_last.Idx;
+                        t.Path.Add(t_last.Fl);
+                    }
+                    else return tickets;
+                for (int v = dest; v != -1 && v != s; v = p[v].Idx)
+                    t.Path.Add(p[v].Fl);
+                t.Path.Reverse();
+                t.Date = t.Path[0].Date;
+                t.Purchased = false;
+                tickets.Add(t);
             }
             return tickets;
         }
@@ -60,6 +127,7 @@ namespace aeroflots.Services
         public async Task<List<Ticket>> SearchTickets()
         {
             List<Ticket> tickets = await SearchDirectTickets();
+            if (tickets.Count < 1) tickets = await SearchTransitiveTickets();
             return tickets;
         }
         public async Task<List<Flight>> GetRaiceOnDay(DateTime date)
@@ -89,5 +157,17 @@ namespace aeroflots.Services
             }
             return fl.Where(x => x.FreeSeats > 0).ToList();
         }
+    }
+}
+
+class FlInd
+{
+    public Flight Fl { get; set; }
+    public int Idx { get; set; } = -1;
+    public FlInd() { }
+    public FlInd(Flight f, int i)
+    {
+        Fl = f;
+        Idx = i;
     }
 }
