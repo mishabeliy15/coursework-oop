@@ -16,9 +16,7 @@ namespace aeroflots.Pages.Tickets
         private readonly aeroflots.Data.ApplicationDbContext _context;
 
         public SearchModel(aeroflots.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         [BindProperty]
         public List<Ticket> Ticket { get;set; }

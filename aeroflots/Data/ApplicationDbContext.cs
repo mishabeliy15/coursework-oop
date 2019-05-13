@@ -17,5 +17,6 @@ namespace aeroflots.Data
             : base(options)
         {
         }
+        public DbSet<aeroflots.Models.Feedback> Feedback { get; set; }
     }
 }
