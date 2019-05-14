@@ -30,8 +30,9 @@ namespace aeroflots.Pages.Tickets
         {
             string userid = _userManager.GetUserId(User);
             Ticket = (await _context.Tickets.Include(t => t.Path).
-                    ThenInclude(t => t.Schedule).
-                ToListAsync()).Where(x =>x.Purchased && x.OwnerId == userid).ToList();
+                    ThenInclude(t => t.Schedule).ToListAsync()).
+                Where(x => x.Purchased && x.OwnerId == userid && 
+                            x.Path != null && x.Path.Count > 0).ToList();
         }
     }
 }
