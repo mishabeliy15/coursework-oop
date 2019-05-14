@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="Ticket.Id" />
             <div class="form-group">
                 <label asp-for="Ticket.Seats" class="control-label"></label>
-                <input asp-for="Ticket.Seats" class="form-control" />
+                <input min="1" value="1" asp-for="Ticket.Seats" class="form-control" />
                 <span asp-validation-for="Ticket.Seats" class="text-danger"></span>
             </div>
             <div class="form-group">
