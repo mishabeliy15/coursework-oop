@@ -21,9 +21,9 @@ namespace aeroflots.Pages.Tickets
         [BindProperty]
         public List<Ticket> Ticket { get;set; }
 
-        public async Task OnGetAsync(string from, string to, DateTime date)
+        public async Task OnGetAsync(string from, string to, DateTime date, int mintransfer)
         {
-            Path t = new Path(_context, from, to, date);
+            Path t = new Path(_context, from, to, date, mintransfer);
             await t.GetDataFromBD();
             Ticket = await t.SearchTickets();
             _context.Tickets.AddRange(Ticket);

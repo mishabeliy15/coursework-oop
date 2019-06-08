@@ -12,6 +12,7 @@ namespace aeroflots.Services
         public string From { get; private set; }
         public string To { get; private set; }
         public DateTime Date { get; private set; }
+        public int TransferTime { get; private set; }
         public Day DayFlag
         {
             get => DateToDay(Date);
@@ -24,6 +25,8 @@ namespace aeroflots.Services
         public Path(Data.ApplicationDbContext db) => _db = db;
         public Path(Data.ApplicationDbContext db, string from, string to, DateTime date) : this(db)
             => (From, To, Date) = (from, to, date);
+        public Path(Data.ApplicationDbContext db, string from, string to, DateTime date, int transfertime) :
+            this(db, from, to, date) => TransferTime = transfertime;
         public async Task GetDataFromBD()
         {
             FlightPlans = await _db.FlightSchedules.ToListAsync();
@@ -91,14 +94,15 @@ namespace aeroflots.Services
                         if (arrtime < deptime) arrtime += 864000000000; // 1 day in UTC
                         if (to == -1)
                             if (cities[v].Edges[j].Schedule.Arrival.ToLower() == b &&
-                                arrtime > d[v])
+                                arrtime > d[v] &&
+                                d[v] + TransferTime * 60000 * 6 <= deptime)
                             {
                                 t_last = new FlInd(cities[v].Edges[j], v);
                                 break;
                             }
                         else
                             continue;
-                        if (d[v] < deptime && arrtime < d[to])
+                        if (d[v] + TransferTime * 60000 * 6 <= deptime && arrtime < d[to])
                         {
                             d[to] = arrtime;
                             p[to] = new FlInd(cities[v].Edges[j], v);

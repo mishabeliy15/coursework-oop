@@ -30,11 +30,12 @@ namespace aeroflots.Pages.Tickets
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null) return NotFound();
-            
             Ticket = await _context.Tickets.Include(t => t.Path).FirstOrDefaultAsync(m => m.Id == id);
-
             if (Ticket == null) return NotFound();
-
+            int min = Ticket.Path.Min(p => p.FreeSeats);
+            if (min <= 0)
+                return RedirectToPage("../Index");
+            ViewData["MaxTickets"] = min;
             return Page();
         }
 
